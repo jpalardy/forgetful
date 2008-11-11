@@ -1,7 +1,7 @@
 
 SPEC = Gem::Specification.new do |s|
   s.name                  = 'forgetful'
-  s.version               = '0.0.1'
+  s.version               = '0.0.2'
   s.summary               = 'A minimal command-line implementation of the SuperMemo 2 algorithm.'
   s.description           = 'A minimal command-line implementation of the SuperMemo 2 algorithm.'
 
@@ -13,7 +13,7 @@ SPEC = Gem::Specification.new do |s|
   s.has_rdoc              = false
 
   s.test_files            = Dir['test/**/*']
-  s.files                 = Dir['**/*']
+  s.files                 = Dir['**/*'].reject {|f| f =~ /\.gemspec$/}
 
   s.executable            = 'forgetful'
   s.bindir                = 'bin'
