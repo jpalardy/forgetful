@@ -1,25 +1,24 @@
 
-spec = Gem::Specification.new do |s|
-  s.name                  = GitRemoteBranch::NAME
-  s.version               = GitRemoteBranch::VERSION::STRING
-  s.summary               = "git_remote_branch eases the interaction with remote branches"
-  s.description           = "git_remote_branch is a learning tool to ease the interaction with " +
-                            "remote branches in simple situations."
+SPEC = Gem::Specification.new do |s|
+  s.name                  = 'forgetful'
+  s.version               = '0.0.1'
+  s.summary               = 'A minimal command-line implementation of the SuperMemo 2 algorithm.'
+  s.description           = 'A minimal command-line implementation of the SuperMemo 2 algorithm.'
 
-  s.authors               = ['Mathieu Martin', 'Carl Mercier']
-  s.email                 = "webmat@gmail.com"
-  s.homepage              = "http://github.com/webmat/git_remote_branch"
-  s.rubyforge_project     = 'grb'
+  s.author                = 'Jonathan Palardy'
+  s.email                 = 'jonathan.palardy@gmail.com'
+  s.homepage              = 'http://github.com/jpalardy/forgetful'
+  s.rubyforge_project     = 'forgetful'
 
   s.has_rdoc              = false
 
   s.test_files            = Dir['test/**/*']
-  s.files                 = Dir['**/*'].reject{|f| f =~ /\Apkg|\Acoverage|\Ardoc|\.gemspec\Z/}
+  s.files                 = Dir['**/*']
 
-  s.executable            = 'grb'
-  s.bindir                = "bin"
-  s.require_path          = "lib"
+  s.executable            = 'forgetful'
+  s.bindir                = 'bin'
+  s.require_path          = 'lib'
 
-  s.add_dependency( 'colored', '>= 1.1' )
+  s.add_dependency('fastercsv', '>= 1.4')
 end
 
