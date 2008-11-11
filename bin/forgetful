@@ -1,0 +1,75 @@
+#!/usr/bin/env ruby
+$VERBOSE = true
+
+############################################################
+
+require "#{File.dirname(__FILE__)}/../lib/forgetful"
+
+############################################################
+
+def ask(prompt, validate_re=//)
+  while true
+    print prompt
+    answer = readline.chomp
+
+    return answer.to_i if answer =~ validate_re
+  end
+end
+
+#-------------------------------------------------
+
+def ask_grade(prompt)
+  ask(prompt, /\A[0-5]\Z/)
+end
+
+#-------------------------------------------------
+
+def ask_about(reminder, i, n)
+  ask("#{i}/#{n}. Q: #{reminder.question}")
+  puts "     A: #{reminder.answer}"
+  q = ask_grade("     ? ")
+  puts
+  return q
+end
+
+#-------------------------------------------------
+
+def quiz(reminders)
+  i = 0
+  reminders.collect do |reminder|
+    i += 1
+    reminder.next(ask_about(reminder, i, reminders.size))
+  end
+end
+
+############################################################
+
+def process_file(filename)
+  #--------------------- quiz ----------------------
+  reminders = Reminder.load_csv(filename)
+
+  dues, not_dues = reminders.partition {|reminder| reminder.execute_on <= Date.today}
+
+  puts "### QUIZ: #{filename}"
+  gradeds = quiz(dues)
+
+  Reminder.save_csv(filename, (gradeds + not_dues).sort)
+
+  #-------------------- review ---------------------
+  faileds = gradeds.select {|reminder| reminder.review? }
+  until faileds.empty?
+    puts "# REVIEW: #{filename}"
+    gradeds = quiz(faileds) # review
+    faileds = gradeds.select {|reminder| reminder.review? }
+  end
+end
+
+############################################################
+
+filenames = ARGV.dup
+ARGV.clear
+
+filenames.each do |filename|
+  process_file filename
+end
+
