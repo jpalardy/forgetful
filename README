@@ -23,9 +23,9 @@ Flow:
 
   1. shows question (press enter)
   2. shows answer
-  3. ask for self-evaluation (type number, and enter)
-  4. repeat for all questions
-  5. repeat for questions that scored less than 4
+  3. asks for self-evaluation (type number, and enter)
+  4. repeats for all questions
+  5. repeats for questions that scored less than 4
 
 Self-evaluation:
 
