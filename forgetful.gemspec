@@ -1,7 +1,7 @@
 
 SPEC = Gem::Specification.new do |s|
   s.name                  = 'forgetful'
-  s.version               = '0.0.2'
+  s.version               = '0.0.3'
   s.summary               = 'A minimal command-line implementation of the SuperMemo 2 algorithm.'
   s.description           = 'A minimal command-line implementation of the SuperMemo 2 algorithm.'
 

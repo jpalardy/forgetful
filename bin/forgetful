@@ -51,7 +51,7 @@ def process_file(filename)
   dues, not_dues = reminders.partition {|reminder| reminder.execute_on <= Date.today}
 
   puts "### QUIZ: #{filename}"
-  gradeds = quiz(dues)
+  gradeds = quiz(dues.sort_by { rand })
 
   Reminder.save_csv(filename, (gradeds + not_dues).sort)
 
@@ -59,7 +59,7 @@ def process_file(filename)
   faileds = gradeds.select {|reminder| reminder.review? }
   until faileds.empty?
     puts "# REVIEW: #{filename}"
-    gradeds = quiz(faileds) # review
+    gradeds = quiz(faileds.sort_by { rand }) # review
     faileds = gradeds.select {|reminder| reminder.review? }
   end
 end
