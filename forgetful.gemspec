@@ -1,16 +1,16 @@
 Gem::Specification.new do |s|
   s.name = %q{forgetful}
-  s.version = "0.0.4"
+  s.version = "0.0.5"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Palardy"]
-  s.date = %q{2008-11-11}
+  s.date = %q{2008-11-12}
   s.default_executable = %q{forgetful}
   s.description = %q{A minimal command-line implementation of the SuperMemo 2 algorithm.}
   s.email = %q{jonathan.palardy@gmail.com}
   s.executables = ["forgetful"]
   s.extra_rdoc_files = ["bin/forgetful", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "README"]
-  s.files = ["bin/forgetful", "examples/katakana_romanji.csv", "examples/romanji_katakana.csv", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "Manifest", "README", "test/test_forgetful.rb", "forgetful.gemspec"]
+  s.files = ["bin/forgetful", "examples/katakana_romanji.csv", "examples/romanji_katakana.csv", "forgetful.gemspec", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "Manifest", "README", "test/test_forgetful.rb"]
   s.homepage = %q{http://github.com/jpalardy/forgetful}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Forgetful", "--main", "README"]
   s.require_paths = ["lib"]

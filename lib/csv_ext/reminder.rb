@@ -7,7 +7,8 @@ class Reminder
   def self.load_csv(filename)
     identity = lambda {|x| x}
 
-    FasterCSV.read(filename, :converters => [identity, identity, :integer, :integer, :date, :float, :integer]).collect do |list|
+    #                                        question  answer    next   ef      i         interval  q
+    FasterCSV.read(filename, :converters => [identity, identity, :date, :float, :integer, :integer, :integer]).collect do |list|
       self.new(*list)
     end
   end

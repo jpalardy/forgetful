@@ -1,14 +1,14 @@
 
 class Reminder
-  attr_reader :question, :answer, :i, :interval, :execute_on, :ef, :q
+  attr_reader :question, :answer, :execute_on, :ef, :i, :interval, :q
 
-  def initialize(question, answer, i=0, interval=0, execute_on=Date.today, ef=2.5, q=nil)
+  def initialize(question, answer, execute_on=Date.today, ef=2.5, i=0, interval=0, q=nil)
     @question = question
     @answer = answer
-    @i = i
-    @interval = interval
     @execute_on = execute_on
     @ef = ef
+    @i = i
+    @interval = interval
     @q = q
   end
 
@@ -26,11 +26,11 @@ class Reminder
     ef = self.ef + (0.1 - (5-q) * (0.08 + (5-q) * 0.02))
     ef = [ef, 1.3].max
 
-    Reminder.new(self.question, self.answer, i, interval, execute_on, ef, q)
+    Reminder.new(self.question, self.answer, execute_on, ef, i, interval, q)
   end
 
   def to_a
-    [self.question, self.answer, self.i, self.interval, self.execute_on, self.ef, self.q]
+    [self.question, self.answer, self.execute_on, self.ef, self.i, self.interval, self.q]
   end
 
   def <=>(other)
