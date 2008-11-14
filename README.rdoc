@@ -1,0 +1,74 @@
+= Forgetful
+
+A minimal command-line app implementing the SuperMemo 2 algorithm.
+
+The SuperMemo algorithm is designed to refresh your memory at
+intervals based on how well you remembered something.
+
+Put question-answer pairs in a file. Everyday, feed the file to forgetful and
+it will quiz you on what you need to remember today. Based on your
+self-evaluation, forgetful will reschedule at an appropriate time in the
+future.
+
+
+== Install
+
+  gem install forgetful
+
+
+== Usage
+
+  forgetful filename.csv [more filenames]
+
+The CSV files are formatted very simply:
+
+  question,answer
+
+The interaction goes as follow:
+
+  forgetful: shows question
+  you:       press enter
+  forgetful: shows answer
+  forgetful: asks for self-evaluation
+  you:       type a number, press enter
+
+You will be asked all of today's questions. After you will be asked, again, the
+questions for which you scored less than 4.
+
+Self-evaluation values:
+
+  5 - perfect response
+  4 - correct response after a hesitation
+  3 - correct response recalled with serious difficulty
+  2 - incorrect response; where the correct one seemed easy to recall
+  1 - incorrect response; the correct one remembered
+  0 - complete blackout.
+
+WARNING: Statistics are written back to the input file. This is a feature. Put
+your CSV files under source control to keep a history.
+
+Enjoy!
+
+
+== License
+
+Copyright (c) 2008 Jonathan Palardy
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
