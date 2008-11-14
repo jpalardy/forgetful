@@ -36,7 +36,11 @@ class Reminder
   def self.generate_csv(reminders)
     FasterCSV.generate do |csv|
       reminders.each do |reminder|
-        csv << reminder.to_a
+        if reminder.to_a.last.nil? # future reminder, never graded
+          csv << reminder.to_a.first(3)
+        else
+          csv << reminder.to_a
+        end
       end
     end
   end

@@ -87,12 +87,14 @@ END
     reminders << Reminder.new('nitrogen','7').next(5).next(5).next(5)
     reminders << Reminder.new('oxygen','8').next(1).next(1).next(1)
     reminders << Reminder.new('fluorine','9').next(1).next(5).next(1).next(5)
+    reminders << Reminder.new('neon','10',Date.today+5)
 
     expected =<<END
-carbon,6,#{Date.today.to_s},2.5,0,0,
-nitrogen,7,#{(Date.today+16).to_s},2.8,3,16,5
-oxygen,8,#{(Date.today+1).to_s},1.3,0,1,1
-fluorine,9,#{(Date.today+1).to_s},1.62,1,1,5
+carbon,6,#{Date.today}
+nitrogen,7,#{(Date.today+16)},2.8,3,16,5
+oxygen,8,#{(Date.today+1)},1.3,0,1,1
+fluorine,9,#{(Date.today+1)},1.62,1,1,5
+neon,10,#{(Date.today+5)}
 END
 
     assert_equal expected, Reminder.generate_csv(reminders)
