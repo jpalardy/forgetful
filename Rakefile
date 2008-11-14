@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'echoe'
 
-Echoe.new('forgetful', '0.0.5') do |p|
+Echoe.new('forgetful', '0.0.6') do |p|
   p.description    = "A minimal command-line implementation of the SuperMemo 2 algorithm."
   p.url            = "http://github.com/jpalardy/forgetful"
   p.author         = "Jonathan Palardy"
