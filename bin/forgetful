@@ -25,9 +25,11 @@ end
 #-------------------------------------------------
 
 def ask_about(reminder, i, n)
-  ask("#{i}/#{n}. Q: #{reminder.question}")
-  puts "     A: #{reminder.answer}"
-  q = ask_grade("     ? ")
+  width = "#{n}/#{n}. ".size
+  padding = " " * width
+  ask "#{i}/#{n}. ".rjust(width) + "Q: #{reminder.question}"
+  puts                   padding + "A: #{reminder.answer}"
+  q = ask_grade          padding + "? "
   puts
   return q
 end
