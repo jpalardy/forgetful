@@ -19,7 +19,7 @@ class Reminder
                   lambda {|interval|   interval.to_i},
                   lambda {|q|          q.nil? ? q : q.to_i}]
 
-    FasterCSV.parse(io).collect do |list|
+    FasterCSV.parse(io, :skip_blanks => true).collect do |list|
       list = list.zip(converters).collect {|col, converter| converter[col]}
       self.new(*list)
     end

@@ -59,6 +59,26 @@ END
     assert_equal_inspect ['oxygen',  '8',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[2].to_a
   end
 
+  def test_parse_csv_full_with_spaces
+    csv = <<END
+
+carbon,6,2008-11-11,2.5,0,0,
+
+
+nitrogen,7,2008-11-11,2.5,0,0,
+oxygen,8,2008-11-11,2.5,0,0,
+
+END
+
+    reminders = Reminder.parse_csv(csv)
+
+    assert_equal 3, reminders.length
+
+    assert_equal_inspect ['carbon',  '6',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[0].to_a
+    assert_equal_inspect ['nitrogen','7',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[1].to_a
+    assert_equal_inspect ['oxygen',  '8',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[2].to_a
+  end
+
   ############################################################
 
   def test_generate_csv
