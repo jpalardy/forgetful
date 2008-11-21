@@ -13,11 +13,9 @@ class Reminder
   def self.parse_csv(io)
     converters = [lambda {|question|   question},
                   lambda {|answer|     answer},
-                  lambda {|execute_on| Date.parse(execute_on)},
-                  lambda {|ef|         ef.to_f},
-                  lambda {|i|          i.to_i},
-                  lambda {|interval|   interval.to_i},
-                  lambda {|q|          q.nil? ? q : q.to_i}]
+                  lambda {|due_on|     Date.parse(due_on)},
+                  lambda {|history|    history.scan(/./).collect {|x| x.to_i}}
+                  ]
 
     FasterCSV.parse(io, :skip_blanks => true).collect do |list|
       list = list.zip(converters).collect {|col, converter| converter[col]}
@@ -36,7 +34,7 @@ class Reminder
   def self.generate_csv(reminders)
     FasterCSV.generate do |csv|
       reminders.each do |reminder|
-        if reminder.to_a.last.nil? # future reminder, never graded
+        if reminder.history.empty?
           csv << reminder.to_a.first(3)
         else
           csv << reminder.to_a

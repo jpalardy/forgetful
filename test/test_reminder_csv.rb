@@ -2,14 +2,7 @@
 require 'test/unit'
 require "#{File.dirname(__FILE__)}/../lib/forgetful"
 
-
 class TestReminderCSV < Test::Unit::TestCase
-
-  def assert_equal_inspect(expected, actual)
-    assert_equal expected.inspect, actual.inspect
-  end
-
-  #-------------------------------------------------
 
   def test_parse_csv_bare
     csv = <<END
@@ -22,9 +15,9 @@ END
 
     assert_equal 3, reminders.length
 
-    assert_equal_inspect ['carbon',  '6',Date.today, 2.5, 0, 0, nil], reminders[0].to_a
-    assert_equal_inspect ['nitrogen','7',Date.today, 2.5, 0, 0, nil], reminders[1].to_a
-    assert_equal_inspect ['oxygen',  '8',Date.today, 2.5, 0, 0, nil], reminders[2].to_a
+    assert_equal ['carbon',  '6',Date.today, []], reminders[0].to_a
+    assert_equal ['nitrogen','7',Date.today, []], reminders[1].to_a
+    assert_equal ['oxygen',  '8',Date.today, []], reminders[2].to_a
   end
 
   def test_parse_csv_with_dates
@@ -38,35 +31,35 @@ END
 
     assert_equal 3, reminders.length
 
-    assert_equal_inspect ['carbon',  '6',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[0].to_a
-    assert_equal_inspect ['nitrogen','7',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[1].to_a
-    assert_equal_inspect ['oxygen',  '8',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[2].to_a
+    assert_equal ['carbon',  '6',Date.parse('2008-11-11'), []], reminders[0].to_a
+    assert_equal ['nitrogen','7',Date.parse('2008-11-11'), []], reminders[1].to_a
+    assert_equal ['oxygen',  '8',Date.parse('2008-11-11'), []], reminders[2].to_a
   end
 
   def test_parse_csv_full
     csv = <<END
-carbon,6,2008-11-11,2.5,0,0,
-nitrogen,7,2008-11-11,2.5,0,0,
-oxygen,8,2008-11-11,2.5,0,0,
+carbon,6,2008-11-11,5
+nitrogen,7,2008-11-11,535
+oxygen,8,2008-11-11,5042
 END
 
     reminders = Reminder.parse_csv(csv)
 
     assert_equal 3, reminders.length
 
-    assert_equal_inspect ['carbon',  '6',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[0].to_a
-    assert_equal_inspect ['nitrogen','7',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[1].to_a
-    assert_equal_inspect ['oxygen',  '8',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[2].to_a
+    assert_equal ['carbon',  '6',Date.parse('2008-11-11'), [5]], reminders[0].to_a
+    assert_equal ['nitrogen','7',Date.parse('2008-11-11'), [5,3,5]], reminders[1].to_a
+    assert_equal ['oxygen',  '8',Date.parse('2008-11-11'), [5,0,4,2]], reminders[2].to_a
   end
 
   def test_parse_csv_full_with_spaces
     csv = <<END
 
-carbon,6,2008-11-11,2.5,0,0,
+carbon,6,2008-11-11,035
 
 
-nitrogen,7,2008-11-11,2.5,0,0,
-oxygen,8,2008-11-11,2.5,0,0,
+nitrogen,7,2008-11-11,55555
+oxygen,8,2008-11-11,1
 
 END
 
@@ -74,9 +67,9 @@ END
 
     assert_equal 3, reminders.length
 
-    assert_equal_inspect ['carbon',  '6',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[0].to_a
-    assert_equal_inspect ['nitrogen','7',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[1].to_a
-    assert_equal_inspect ['oxygen',  '8',Date.parse('2008-11-11'), 2.5, 0, 0, nil], reminders[2].to_a
+    assert_equal ['carbon',  '6',Date.parse('2008-11-11'), [0,3,5]], reminders[0].to_a
+    assert_equal ['nitrogen','7',Date.parse('2008-11-11'), [5,5,5,5,5]], reminders[1].to_a
+    assert_equal ['oxygen',  '8',Date.parse('2008-11-11'), [1]], reminders[2].to_a
   end
 
   ############################################################
@@ -91,9 +84,9 @@ END
 
     expected =<<END
 carbon,6,#{Date.today}
-nitrogen,7,#{(Date.today+16)},2.8,3,16,5
-oxygen,8,#{(Date.today+1)},1.3,0,1,1
-fluorine,9,#{(Date.today+1)},1.62,1,1,5
+nitrogen,7,#{(Date.today+16)},555
+oxygen,8,#{(Date.today+1)},111
+fluorine,9,#{(Date.today+1)},1515
 neon,10,#{(Date.today+5)}
 END
 
@@ -101,3 +94,4 @@ END
   end
 
 end
+

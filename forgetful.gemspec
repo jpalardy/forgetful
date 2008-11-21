@@ -1,23 +1,23 @@
 Gem::Specification.new do |s|
   s.name = %q{forgetful}
-  s.version = "0.0.6"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 1.2") if s.respond_to? :required_rubygems_version=
   s.authors = ["Jonathan Palardy"]
-  s.date = %q{2008-11-13}
+  s.date = %q{2008-11-21}
   s.default_executable = %q{forgetful}
   s.description = %q{A minimal command-line implementation of the SuperMemo 2 algorithm.}
   s.email = %q{jonathan.palardy@gmail.com}
   s.executables = ["forgetful"]
-  s.extra_rdoc_files = ["bin/forgetful", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "README.rdoc"]
-  s.files = ["bin/forgetful", "examples/katakana_romanji.csv", "examples/romanji_katakana.csv", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "Manifest", "MIT-LICENSE", "README.rdoc", "test/test_reminder.rb", "test/test_reminder_csv.rb", "forgetful.gemspec"]
+  s.extra_rdoc_files = ["bin/forgetful", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "lib/supermemo.rb", "README.rdoc"]
+  s.files = ["bin/forgetful", "examples/katakana_romanji.csv", "examples/romanji_katakana.csv", "lib/csv_ext/reminder.rb", "lib/forgetful.rb", "lib/reminder.rb", "lib/supermemo.rb", "Manifest", "MIT-LICENSE", "README.rdoc", "test/test_reminder.rb", "test/test_reminder_csv.rb", "test/test_supermemo.rb", "forgetful.gemspec"]
   s.homepage = %q{http://github.com/jpalardy/forgetful}
   s.rdoc_options = ["--line-numbers", "--inline-source", "--title", "Forgetful", "--main", "README.rdoc"]
   s.require_paths = ["lib"]
   s.rubyforge_project = %q{forgetful}
   s.rubygems_version = %q{1.2.0}
   s.summary = %q{A minimal command-line implementation of the SuperMemo 2 algorithm.}
-  s.test_files = ["test/test_reminder.rb", "test/test_reminder_csv.rb"]
+  s.test_files = ["test/test_reminder.rb", "test/test_reminder_csv.rb", "test/test_supermemo.rb"]
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION

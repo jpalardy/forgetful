@@ -50,7 +50,7 @@ def process_file(filename)
   #--------------------- quiz ----------------------
   reminders = Reminder.read_csv(filename)
 
-  dues, not_dues = reminders.partition {|reminder| reminder.execute_on <= Date.today}
+  dues, not_dues = reminders.partition {|reminder| reminder.due_on <= Date.today}
 
   puts "### QUIZ: #{filename}"
   gradeds = quiz(dues.sort_by { rand })
