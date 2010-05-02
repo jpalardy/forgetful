@@ -1,17 +1,44 @@
 require 'rubygems'
 require 'rake'
-require 'echoe'
 
-Echoe.new('forgetful', '0.1.0') do |p|
-  p.description    = "A minimal command-line implementation of the SuperMemo 2 algorithm."
-  p.url            = "http://github.com/jpalardy/forgetful"
-  p.author         = "Jonathan Palardy"
-  p.email          = "jonathan.palardy@gmail.com"
-  p.ignore_pattern = ["tmp/*", "script/*"]
-  p.has_rdoc       = false
-  p.include_rakefile = false
-  p.development_dependencies = []
-  p.runtime_dependencies = ['fastercsv >= 1.4']
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name = "forgetful"
+    gem.summary =     "A minimal command-line implementation of the SuperMemo 2 algorithm."
+    gem.description = "A minimal command-line implementation of the SuperMemo 2 algorithm."
+    gem.email = "jonathan.palardy@gmail.com"
+    gem.homepage = "http://github.com/jpalardy/forgetful"
+    gem.authors = ["Jonathan Palardy"]
+    gem.add_development_dependency "rspec", ">= 1.2.9"
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: gem install jeweler"
 end
 
-Dir["#{File.dirname(__FILE__)}/tasks/*.rake"].sort.each { |ext| load ext }
+require 'spec/rake/spectask'
+Spec::Rake::SpecTask.new(:spec) do |spec|
+  spec.libs << 'lib' << 'spec'
+  spec.spec_files = FileList['spec/**/*_spec.rb']
+end
+
+Spec::Rake::SpecTask.new(:rcov) do |spec|
+  spec.libs << 'lib' << 'spec'
+  spec.pattern = 'spec/**/*_spec.rb'
+  spec.rcov = true
+end
+
+task :spec => :check_dependencies
+
+task :default => :spec
+
+require 'rake/rdoctask'
+Rake::RDocTask.new do |rdoc|
+  version = File.exist?('VERSION') ? File.read('VERSION') : ""
+
+  rdoc.rdoc_dir = 'rdoc'
+  rdoc.title = "forgetful #{version}"
+  rdoc.rdoc_files.include('README*')
+  rdoc.rdoc_files.include('lib/**/*.rb')
+end
