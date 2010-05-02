@@ -1,6 +1,7 @@
 
 require 'test/unit'
-require "#{File.dirname(__FILE__)}/../lib/forgetful"
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+require 'forgetful'
 
 class TestReminder < Test::Unit::TestCase
 
