@@ -1,6 +1,4 @@
-
 module SuperMemo
-
   def self.next_ef(q, ef)
     return [ef + (0.1 - (5-q) * (0.08 + (5-q) * 0.02)), 1.3].max
   end
@@ -12,8 +10,6 @@ module SuperMemo
   def self.next_interval(q, ef, i, interval)
     return q < 3 ? 1 : {0 => 1, 1 => 6}.fetch(i, interval * ef).round
   end
-
-  #-------------------------------------------------
 
   #      [] -> 2.5, 0, 0
   # [5,5,5] -> 2.8, 3, 16
@@ -28,7 +24,4 @@ module SuperMemo
     ef, i, interval = traverse(qs)
     return date + interval
   end
-
 end
-
-

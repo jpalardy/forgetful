@@ -1,4 +1,3 @@
-
 require "csv"
 if CSV.const_defined? :Reader
   # Ruby 1.8 compatible
@@ -9,7 +8,6 @@ if CSV.const_defined? :Reader
 end
 
 class Reminder
-
   def self.read_csv(filename)
     File.open(filename) do |file|
       self.parse_csv(file)
@@ -29,8 +27,6 @@ class Reminder
     end
   end
 
-  ############################################################
-
   def self.write_csv(filename, reminders)
     File.open(filename, "w") do |file|
       file.write(generate_csv(reminders))
@@ -48,6 +44,4 @@ class Reminder
       end
     end
   end
-
 end
-

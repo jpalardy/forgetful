@@ -1,4 +1,3 @@
-
 class Reminder
   attr_reader :question, :answer, :due_on, :history
 
@@ -24,6 +23,4 @@ class Reminder
   def review?
     (self.history.last || 0) < 4
   end
-
 end
-
