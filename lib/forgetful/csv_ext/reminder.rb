@@ -1,6 +1,12 @@
 
-require 'rubygems'
-require 'fastercsv'
+require "csv"
+if CSV.const_defined? :Reader
+  # Ruby 1.8 compatible
+  require 'rubygems'
+  require 'fastercsv'
+  Object.send(:remove_const, :CSV)
+  CSV = FasterCSV
+end
 
 class Reminder
 
@@ -17,7 +23,7 @@ class Reminder
                   lambda {|history|    history.scan(/./).collect {|x| x.to_i}}
                   ]
 
-    FasterCSV.parse(io, :skip_blanks => true).collect do |list|
+    CSV.parse(io, :skip_blanks => true).collect do |list|
       list = list.zip(converters).collect {|col, converter| converter[col]}
       self.new(*list)
     end
@@ -32,7 +38,7 @@ class Reminder
   end
 
   def self.generate_csv(reminders)
-    FasterCSV.generate do |csv|
+    CSV.generate do |csv|
       reminders.each do |reminder|
         if reminder.history.empty?
           csv << reminder.to_a.first(3)

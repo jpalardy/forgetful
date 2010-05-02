@@ -54,7 +54,8 @@ class TestReminder < Test::Unit::TestCase
 
     assert_equal [5,4,2], reminder.history
 
-    assert_raise_message TypeError, /can't modify frozen array/ do
+    type =  RUBY_VERSION =~ /^1\.8/ ? TypeError : RuntimeError
+    assert_raise_message type, /can't modify frozen array/ do
       @carbon_question.history.push(5)
     end
 
