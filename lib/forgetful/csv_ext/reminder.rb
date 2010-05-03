@@ -8,6 +8,14 @@ if CSV.const_defined? :Reader
 end
 
 class Reminder
+  def to_csv
+    if history.empty?
+      [question, answer, due_on.to_s]
+    else
+      [question, answer, due_on.to_s, history.join]
+    end
+  end
+
   def self.read_csv(filename)
     File.open(filename) do |file|
       self.parse_csv(file)
@@ -15,15 +23,14 @@ class Reminder
   end
 
   def self.parse_csv(io)
-    converters = [lambda {|question|   question},
-                  lambda {|answer|     answer},
-                  lambda {|due_on|     Date.parse(due_on)},
-                  lambda {|history|    history.scan(/./).collect {|x| x.to_i}}
-                  ]
+    converters = [lambda { |question| question },
+                  lambda { |answer|   answer },
+                  lambda { |due_on|   Date.parse(due_on) },
+                  lambda { |history|  history.scan(/./).collect { |x| x.to_i } }]
 
     CSV.parse(io, :skip_blanks => true).collect do |list|
-      list = list.zip(converters).collect {|col, converter| converter[col]}
-      self.new(*list)
+      list = list.zip(converters).collect { |col, converter| converter[col] }
+      new(*list)
     end
   end
 
@@ -36,11 +43,7 @@ class Reminder
   def self.generate_csv(reminders)
     CSV.generate do |csv|
       reminders.each do |reminder|
-        if reminder.history.empty?
-          csv << reminder.to_a.first(3)
-        else
-          csv << reminder.to_a
-        end
+        csv << reminder.to_csv
       end
     end
   end

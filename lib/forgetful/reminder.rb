@@ -9,18 +9,18 @@ class Reminder
   end
 
   def next(q)
-    Reminder.new(self.question, self.answer, SuperMemo::next_date(Date.today, self.history + [q]), self.history + [q])
+    Reminder.new(question, answer, SuperMemo::next_date(Date.today, history + [q]), history + [q])
   end
 
   def to_a
-    [self.question, self.answer, self.due_on, self.history]
+    [question, answer, due_on, history]
   end
 
   def <=>(other)
-    self.to_a <=> other.to_a
+    to_a <=> other.to_a
   end
 
   def review?
-    (self.history.last || 0) < 4
+    history.empty? || history.last < 4
   end
 end
