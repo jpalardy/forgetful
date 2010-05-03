@@ -1,5 +1,7 @@
 = forgetful
 
+(tested with ree-1.8.7 and 1.9.2dev)
+
 A minimal command-line app implementing the SuperMemo 2 algorithm.
 
 The SuperMemo algorithm is designed to refresh your memory at
