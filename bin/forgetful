@@ -1,9 +1,8 @@
 #!/usr/bin/env ruby
-$VERBOSE = true
 
 ############################################################
 
-require "#{File.dirname(__FILE__)}/../lib/forgetful"
+require "forgetful"
 
 ############################################################
 
