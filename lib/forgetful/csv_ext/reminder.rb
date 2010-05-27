@@ -26,10 +26,10 @@ class Reminder
     converters = [lambda { |question| question },
                   lambda { |answer|   answer },
                   lambda { |due_on|   Date.parse(due_on) },
-                  lambda { |history|  history.scan(/./).collect { |x| x.to_i } }]
+                  lambda { |history|  history.scan(/./).map { |x| x.to_i } }]
 
-    CSV.parse(io, :skip_blanks => true).collect do |list|
-      list = list.zip(converters).collect { |col, converter| converter[col] }
+    CSV.parse(io, :skip_blanks => true).map do |list|
+      list = list.zip(converters).map { |col, converter| converter[col] }
       new(*list)
     end
   end
