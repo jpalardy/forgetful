@@ -9,7 +9,8 @@ class Reminder
   end
 
   def next(q)
-    Reminder.new(question, answer, SuperMemo::next_date(Date.today, history + [q]), history + [q])
+    new_history = history + [q]
+    Reminder.new(question, answer, SuperMemo::next_date(Date.today, new_history), new_history)
   end
 
   def to_a
