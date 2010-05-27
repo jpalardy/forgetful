@@ -33,11 +33,11 @@ module SuperMemo
     return [ef, i, interval] if qs.empty?
 
     q = qs.first
-    return traverse(qs[1..-1], next_ef(q, ef), next_i(q, i), next_interval(q, ef, i, interval))
+    traverse(qs[1..-1], next_ef(q, ef), next_i(q, i), next_interval(q, ef, i, interval))
   end
 
   def self.next_date(date, qs)
     ef, i, interval = traverse(qs)
-    return date + interval
+    date + interval
   end
 end
