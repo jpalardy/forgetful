@@ -12,11 +12,19 @@ module SuperMemo
   end
 
   def self.next_i(q, i)
-    return q < 3 ? 0 : i+1
+    return 0 if q < 3
+
+    i+1
   end
 
   def self.next_interval(q, ef, i, interval)
-    return q < 3 ? 1 : {0 => 1, 1 => 6}.fetch(i, interval * ef).round
+    return 1 if q < 3
+
+    case i
+    when 0 then 1
+    when 1 then 6
+    else        (interval * ef).round
+    end
   end
 
   #      [] -> 2.5, 0, 0
