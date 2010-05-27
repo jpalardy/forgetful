@@ -1,6 +1,14 @@
 module SuperMemo
+  # D_EF[q] = (0.1 - (5-q) * (0.08 + (5-q) * 0.02))
+  D_EF = { 0 => -0.8,
+           1 => -0.54,
+           2 => -0.32,
+           3 => -0.14,
+           4 =>  0,
+           5 =>  0.1 }
+
   def self.next_ef(q, ef)
-    return [ef + (0.1 - (5-q) * (0.08 + (5-q) * 0.02)), 1.3].max
+    [ef + D_EF[q], 1.3].max
   end
 
   def self.next_i(q, i)
