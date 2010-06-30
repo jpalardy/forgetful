@@ -1,51 +1,49 @@
+#!/usr/bin/env ruby
 
 require "forgetful"
 require "forgetful/cli"
-require 'getoptlong'
+require 'optparse'
 
 #-------------------------------------------------
 
-def usage(status=0)
-  $stderr.puts <<-END
-Usage: #{File.basename($0)} [options] filename(s)
+def parse(args)
+  options = { :filenames => [],
+              :action    => :quiz }
 
-    --help,               -h   Show this message
-    --touch,              -t   Validate filename(s) and write back in full CSV format
-    --version                  Show version information
-  END
+  args.options do |arg|
+    arg.banner = "Usage: forgetful [OPTION]... [FILE]..."
+    arg.separator ""
+    arg.separator "Specific options:"
 
-  exit status
-end
-
-def parse_argv
-  result = { :filenames => [],
-             :action    => :quiz }
-
-  opts = GetoptLong.new(['--help',    '-h', GetoptLong::NO_ARGUMENT],
-                        ['--touch',   '-t', GetoptLong::NO_ARGUMENT],
-                        ['--version',       GetoptLong::NO_ARGUMENT])
-
-  opts.each do |opt, arg|
-    case opt
-    when '--help'
-      usage
-    when '--touch'
-      result[:action] = :touch
-    when '--version'
-      puts File.read(File.join(File.dirname(__FILE__), "..", "VERSION"))
-      exit 0
+    arg.on(     '-t', '--touch',   "Validate filename(s) and write back in full CSV format") do
+      options[:action] = :touch
     end
+
+    arg.separator ""
+    arg.separator "Common options:"
+
+    arg.on(           '--version', "Show version") do
+      puts File.read(File.join(File.dirname(__FILE__), "..", "VERSION"))
+      exit
+    end
+
+    arg.on_tail('-h', '--help',    "Show this message") do
+      puts arg
+      exit
+    end
+
+    arg.parse!
   end
 
-  result[:filenames] = ARGV.dup
-  ARGV.clear
+  options[:filenames] = args.dup
+  args.clear
 
-  result
+  options
 end
 
 #-------------------------------------------------
 
-options = parse_argv
+options = parse(ARGV)
 
 begin
   options[:filenames].each do |filename|
