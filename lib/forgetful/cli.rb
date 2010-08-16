@@ -1,10 +1,16 @@
 
 class ReminderFile
-  attr_reader :filename, :verbose
+  attr_reader :filename, :verbose, :sort_type
 
-  def initialize(filename, verbose=false)
-    @filename = filename
-    @verbose  = verbose
+  SORT_TYPE = {
+    :easier_first => lambda { |reminder| [1/reminder.ef, rand] },
+    :random       => lambda { rand }
+  }
+
+  def initialize(filename, sort_type=:easier_first, verbose=false)
+    @filename  = filename
+    @verbose   = verbose
+    @sort_type = sort_type
   end
 
   def reminders
@@ -27,7 +33,7 @@ class ReminderFile
   def quiz
     puts "### QUIZ: #{filename}"
     dues, not_dues = reminders.partition { |reminder| reminder.due_on <= Date.today }
-    gradeds = quiz_map(dues.sort_by { rand })
+    gradeds = quiz_map(dues.sort_by(&SORT_TYPE[sort_type]))
 
     self.reminders = gradeds + not_dues
 

@@ -9,6 +9,7 @@ require 'optparse'
 def parse(args)
   options = { :filenames => [],
               :verbose   => false,
+              :sort_type => :easier_first,
               :action    => :quiz }
 
   args.options do |arg|
@@ -18,6 +19,10 @@ def parse(args)
 
     arg.on(     '-t', '--touch',   "Validate filename(s) and write back in full CSV format") do
       options[:action] = :touch
+    end
+
+    arg.on(     '-R', '--random', "Random sort - default is easier first") do
+      options[:sort_type] = :random
     end
 
     arg.separator ""
@@ -52,7 +57,7 @@ options = parse(ARGV)
 
 begin
   options[:filenames].each do |filename|
-    ReminderFile.new(filename, options[:verbose]).send(options[:action])
+    ReminderFile.new(filename, options[:sort_type], options[:verbose]).send(options[:action])
   end
 rescue Interrupt
   puts
