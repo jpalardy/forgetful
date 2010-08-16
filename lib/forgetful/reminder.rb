@@ -8,6 +8,10 @@ class Reminder
     @history = history.dup.freeze
   end
 
+  def ef
+    SuperMemo::traverse(history)[0]
+  end
+
   def next(q)
     new_history = history + [q]
     Reminder.new(question, answer, SuperMemo::next_date(Date.today, new_history), new_history)

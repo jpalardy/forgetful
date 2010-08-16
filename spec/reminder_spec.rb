@@ -16,6 +16,10 @@ describe "reminder" do
     it "should be valid" do
       @reminder.to_a.should == [@question, @answer, Date.today, []]
     end
+
+    it "should have an ef of 2.5" do
+      @reminder.ef.should be_close(2.5, 0.0001)
+    end
   end
 
   describe "with full constructor" do
@@ -32,6 +36,10 @@ describe "reminder" do
       lambda {
         @reminder.history.push(5)
       }.should raise_error(error_type, "can't modify frozen array")
+    end
+
+    it "should have an ef of 2.8 (based on history)" do
+      @reminder.ef.should be_close(2.8, 0.0001)
     end
   end
 
