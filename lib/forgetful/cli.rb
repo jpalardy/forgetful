@@ -40,7 +40,7 @@ class ReminderFile
 
   private
     def quiz_map(reminders)
-      reminders.zip(1..reminders.length).map do |reminder, i|
+      reminders.zip((1..reminders.length).to_a).map do |reminder, i|
         q = ask(reminder, i, reminders.size)
         reminder.next(q)
       end
