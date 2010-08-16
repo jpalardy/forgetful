@@ -1,9 +1,10 @@
 
 class ReminderFile
-  attr_reader :filename
+  attr_reader :filename, :verbose
 
-  def initialize(filename)
+  def initialize(filename, verbose=false)
     @filename = filename
+    @verbose  = verbose
   end
 
   def reminders
@@ -54,6 +55,7 @@ class ReminderFile
       readline
 
       puts padding + "A: #{reminder.answer}"
+      puts padding + "   %.2f -> %s" % [reminder.ef, reminder.history.join] if verbose
 
       while true
         print padding + "? "

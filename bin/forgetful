@@ -8,6 +8,7 @@ require 'optparse'
 
 def parse(args)
   options = { :filenames => [],
+              :verbose   => false,
               :action    => :quiz }
 
   args.options do |arg|
@@ -21,6 +22,10 @@ def parse(args)
 
     arg.separator ""
     arg.separator "Common options:"
+
+    arg.on(     '-v', '--verbose', "Show more information") do
+      options[:verbose] = true
+    end
 
     arg.on(           '--version', "Show version") do
       puts File.read(File.join(File.dirname(__FILE__), "..", "VERSION"))
@@ -47,7 +52,7 @@ options = parse(ARGV)
 
 begin
   options[:filenames].each do |filename|
-    ReminderFile.new(filename).send(options[:action])
+    ReminderFile.new(filename, options[:verbose]).send(options[:action])
   end
 rescue Interrupt
   puts
