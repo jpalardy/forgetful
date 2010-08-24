@@ -11,7 +11,8 @@ class ReminderFile
     @reminders ||= Reminder.read_csv(filename)
   end
 
-  def reminders=(reminders)
+  def write(reminders)
+    raise "Writing back a different number of reminders than read from file (#{reminders.size} != #{@reminders.size})" if reminders.size != @reminders.size
     Reminder.write_csv(filename, reminders.sort)
   end
 
@@ -21,30 +22,37 @@ class ReminderFile
   # 3. sort the rows
   def touch
     puts "### TOUCH: #{filename}"
-    self.reminders = reminders
+    write(reminders)
   end
 
   def quiz
     puts "### QUIZ: #{filename}"
     dues, not_dues = reminders.partition { |reminder| reminder.due_on <= Date.today }
-    gradeds = quiz_map(dues.sort_by { rand })
+    gradeds, ungradeds = quiz_map(dues.sort_by { rand })
 
-    self.reminders = gradeds + not_dues
+    write(gradeds + ungradeds + not_dues)
 
     faileds = gradeds.select { |reminder| reminder.review? }
-    until faileds.empty?
+    until faileds.empty? || ungradeds.any?
       puts "### REVIEW: #{filename}"
-      gradeds = quiz_map(faileds.sort_by { rand })
+      gradeds, ungradeds = quiz_map(faileds.sort_by { rand })
       faileds = gradeds.select { |reminder| reminder.review? }
     end
   end
 
   private
     def quiz_map(reminders)
-      reminders.zip((1..reminders.length).to_a).map do |reminder, i|
-        q = ask(reminder, i, reminders.size)
-        reminder.next(q)
+      gradeds = []
+      ungradeds = reminders.dup
+
+      reminders.each_with_index do |reminder, i|
+        q = ask(reminder, i+1, reminders.size)
+        gradeds << ungradeds.shift.next(q)
       end
+    rescue EOFError
+      # tolerate Ctrl-D, skips the rest of the quiz
+    ensure
+      return gradeds, ungradeds
     end
 
     def ask(reminder, i, n)
