@@ -10,7 +10,7 @@ begin
     gem.email = "jonathan.palardy@gmail.com"
     gem.homepage = "http://github.com/jpalardy/forgetful"
     gem.authors = ["Jonathan Palardy"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", "= 1.2.9"
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
