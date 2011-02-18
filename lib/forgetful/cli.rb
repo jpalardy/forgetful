@@ -14,13 +14,12 @@ class ReminderFile
 
   def write(reminders)
     raise "Writing back a different number of reminders than read from file (#{reminders.size} != #{@reminders.size})" if reminders.size != @reminders.size
-    Reminder.write_csv(filename, reminders.sort)
+    Reminder.write_csv(filename, reminders)
   end
 
   # subtle -- reading and writing back a file will:
   # 1. validate the file
   # 2. add the date column
-  # 3. sort the rows
   def touch
     puts "### TOUCH: #{filename}"
     write(reminders)
