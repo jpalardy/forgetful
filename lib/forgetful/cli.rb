@@ -1,14 +1,15 @@
 
 class ReminderFile
-  attr_reader :filename, :verbose
+  attr_reader :filename, :verbose, :delay
 
-  def initialize(filename, verbose=false)
+  def initialize(filename, verbose=false, delay=0..0)
     @filename = filename
     @verbose  = verbose
+    @delay    = delay
   end
 
   def reminders
-    @reminders ||= Reminder.read_csv(filename)
+    @reminders ||= Reminder.read_csv(filename, delay)
   end
 
   def write(reminders)

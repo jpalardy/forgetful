@@ -6,34 +6,64 @@ require 'optparse'
 
 #-------------------------------------------------
 
+class FormatException < RuntimeError; end
+
+#-------------------------------------------------
+
+def parse_range(value)
+  case value
+  when /\A(\d+)\Z/
+    min = 0
+    max = Integer($1)
+  when /\A(\d+)\.\.(\d+)\Z/
+    min = Integer($1)
+    max = Integer($2)
+  else
+    raise FormatException.new("unrecognized format: '#{value}'")
+  end
+
+  raise FormatException.new("min cannot be larger than max: '#{value}'") if min > max
+
+  min..max
+end
+
 def parse(args)
   options = { :filenames => [],
               :verbose   => false,
-              :action    => :quiz }
+              :action    => :quiz,
+              :delay     => 0..0 }
 
   args.options do |arg|
     arg.banner = "Usage: forgetful [OPTION]... [FILE]..."
     arg.separator ""
     arg.separator "Specific options:"
 
-    arg.on(     '-t', '--touch',   "Validate filename(s) and write back in full CSV format") do
+    arg.on(     '-t', '--touch',       "Validate filename(s) and write back in full CSV format") do
       options[:action] = :touch
+    end
+
+    arg.on(     '-d', '--delay VALUE', "Delay range (in days) to add to unscheduled items (used with --touch)") do |value|
+      begin
+        options[:delay] = parse_range(value)
+      rescue FormatException => e
+        arg.abort(e.message)
+      end
     end
 
     arg.separator ""
     arg.separator "Common options:"
 
-    arg.on(     '-v', '--verbose', "Show more information") do
+    arg.on(     '-v', '--verbose',     "Show more information") do
       options[:verbose] = true
     end
 
-    arg.on(           '--version', "Show version") do
+    arg.on(           '--version',     "Show version") do
       puts File.read(File.join(File.dirname(__FILE__), "..", "VERSION"))
       exit
     end
 
-    arg.on_tail('-h', '--help',    "Show this message") do
-      puts arg
+    arg.on_tail('-h', '--help',        "Show this message") do
+      warn(arg)
       exit
     end
 
@@ -52,7 +82,7 @@ options = parse(ARGV)
 
 begin
   options[:filenames].each do |filename|
-    ReminderFile.new(filename, options[:verbose]).send(options[:action])
+    ReminderFile.new(filename, options[:verbose], options[:delay]).send(options[:action])
   end
 rescue Interrupt
   puts
