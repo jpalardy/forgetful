@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 require "forgetful"
-require "forgetful/cli"
+require "forgetful/cli/reminder_file"
 require 'optparse'
 
 #-------------------------------------------------

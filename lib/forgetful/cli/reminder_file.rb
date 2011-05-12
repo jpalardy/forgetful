@@ -1,4 +1,6 @@
 
+require 'forgetful/extensions/csv/reminder.rb'
+
 class ReminderFile
   attr_reader :filename, :verbose, :delay
 
