@@ -13,7 +13,6 @@ class ReminderFile
   end
 
   def write(reminders)
-    raise "Writing back a different number of reminders than read from file (#{reminders.size} != #{@reminders.size})" if reminders.size != @reminders.size
     Reminder.write_csv(filename, reminders)
   end
 
@@ -27,43 +26,52 @@ class ReminderFile
 
   def quiz
     puts "### QUIZ: #{filename}"
-    dues, not_dues = reminders.partition { |reminder| reminder.due_on <= Date.today }
-    gradeds, ungradeds = quiz_map(dues.sort_by { rand })
 
-    write(gradeds + ungradeds + not_dues)
+    questions = reminders.map.with_index { |reminder, i| [reminder, i] }.
+                          select { |reminder, i| reminder.due_on <= Date.today }.
+                          map do |reminder,i|
+                            { id:       i,
+                              question: reminder.question,
+                              answer:   reminder.answer }
+                          end.
+                          sort_by { rand }
 
-    faileds = gradeds.select { |reminder| reminder.review? }
-    until faileds.empty? || ungradeds.any?
-      puts "### REVIEW: #{filename}"
-      gradeds, ungradeds = quiz_map(faileds.sort_by { rand })
-      faileds = gradeds.select { |reminder| reminder.review? }
-    end
+    results = grade(questions)
+    write(refresh(reminders, results))
   end
 
   private
-    def quiz_map(reminders)
-      gradeds = []
-      ungradeds = reminders.dup
-
-      reminders.each_with_index do |reminder, i|
-        q = ask(reminder, i+1, reminders.size)
-        gradeds << ungradeds.shift.next(q)
+    def refresh(reminders, results)
+      reminders = reminders.dup
+      results.each do |id,q|
+        reminders[id] = reminders[id].next(q)
       end
-    rescue EOFError
-      # tolerate Ctrl-D, skips the rest of the quiz
-    ensure
-      return gradeds, ungradeds
+      reminders
     end
 
-    def ask(reminder, i, n)
+    def grade(questions)
+      results = []
+
+      begin
+        questions.each_with_index do |question, i|
+          q = ask(question, i+1, questions.size)
+          results << [question[:id], q]
+        end
+      rescue EOFError
+        # tolerate Ctrl-D, skips the rest of the quiz
+      end
+
+      results
+    end
+
+    def ask(question, i, n)
       width = "#{n}/#{n}. ".size
       padding = " " * width
 
-      print "#{i}/#{n}. ".rjust(width) + "Q: #{reminder.question}"
+      print "#{i}/#{n}. ".rjust(width) + "Q: #{question[:question]}"
       readline
 
-      puts padding + "A: #{reminder.answer}"
-      puts padding + "   %.2f -> %s" % [reminder.ef, reminder.history.join] if verbose
+      puts padding + "A: #{question[:answer]}"
 
       while true
         print padding + "? "
