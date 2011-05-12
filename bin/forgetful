@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require "forgetful"
-require "forgetful/cli/reminder_file"
 require 'optparse'
 
 #-------------------------------------------------
@@ -29,7 +27,6 @@ end
 
 def parse(args)
   options = { :filenames => [],
-              :verbose   => false,
               :action    => :quiz,
               :delay     => 0..0 }
 
@@ -52,10 +49,6 @@ def parse(args)
 
     arg.separator ""
     arg.separator "Common options:"
-
-    arg.on(     '-v', '--verbose',     "Show more information") do
-      options[:verbose] = true
-    end
 
     arg.on(           '--version',     "Show version") do
       puts File.read(File.join(File.dirname(__FILE__), "..", "VERSION"))
@@ -80,12 +73,34 @@ end
 
 options = parse(ARGV)
 
+require "forgetful"
+require "forgetful/extensions/csv/reminder_file"
+require "forgetful/questionaire"
+require "forgetful/cli/quizzer"
+
 begin
   options[:filenames].each do |filename|
-    ReminderFile.new(filename, options[:verbose], options[:delay]).send(options[:action])
+    csv_file = ReminderFile.new(filename, options[:delay])
+
+    case options[:action]
+    when :touch
+      puts "### TOUCH: #{filename}"
+      # subtle -- reading and writing back a file will:
+      # 1. validate the file
+      # 2. add the date column
+      csv_file.write(csv_file.read)
+    when :quiz
+      puts "### QUIZ: #{filename}"
+
+      questionaire = Questionaire.new(csv_file)
+      quizzer = CLI::Quizzer.new(questionaire)
+
+      quizzer.quiz
+    else
+      raise 'hell' # this should not happen
+    end
   end
 rescue Interrupt
   puts
   # aborting ... won't save file
 end
-
