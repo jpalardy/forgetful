@@ -1,7 +1,6 @@
 require "csv"
 if CSV.const_defined? :Reader
   # Ruby 1.8 compatible
-  require 'rubygems'
   require 'fastercsv'
   Object.send(:remove_const, :CSV)
   CSV = FasterCSV
