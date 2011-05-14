@@ -73,6 +73,7 @@ end
 
 options = parse(ARGV)
 
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
 require "forgetful"
 require "forgetful/extensions/csv/reminder_file"
 require "forgetful/questionaire"
