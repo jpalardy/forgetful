@@ -35,8 +35,16 @@ class ReminderFile
 
       CSV.parse(io, :skip_blanks => true).map do |list|
         list = list.zip(converters).map { |col, converter| converter[col] }
-        list << Date.today + Random.new.rand(delay) if list.length == 2 # missing date
+        list << Date.today + rand_from_range(delay) if list.length == 2 # missing date
         Reminder.new(*list)
+      end
+    end
+
+    def rand_from_range(range)
+      if RUBY_VERSION < '1.9'
+        (range.min + (range.max - range.min + 1) * rand).floor
+      else
+        Random.new.rand(range)
       end
     end
 end
