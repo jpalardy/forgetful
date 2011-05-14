@@ -6,12 +6,13 @@ class Questionaire
   end
 
   def questions
-    reminders.map.with_index { |reminder, i| [reminder, i] }.
+    i = 0
+    reminders.map    { |reminder|    pair = [reminder, i]; i+=1; pair }.
               select { |reminder, i| reminder.due_on <= Date.today }.
-              map do |reminder,i|
-                { id:       i,
-                  question: reminder.question,
-                  answer:   reminder.answer }
+              map do   |reminder, i|
+                { :id       => i,
+                  :question => reminder.question,
+                  :answer   => reminder.answer }
               end
   end
 
@@ -25,7 +26,7 @@ class Questionaire
     def update(reminders, results)
       reminders = reminders.dup
       results.each do |id,q|
-        reminders[id] = reminders[id].next(q)
+        reminders[id] = reminders.fetch(id).next(q)
       end
       reminders
     end
