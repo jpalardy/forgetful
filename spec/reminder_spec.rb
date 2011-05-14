@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
 describe "reminder" do
   before do
@@ -18,7 +18,7 @@ describe "reminder" do
     end
 
     it "should have an ef of 2.5" do
-      @reminder.ef.should be_close(2.5, 0.0001)
+      @reminder.ef.should be_within(EPSILON).of(2.5)
     end
   end
 
@@ -39,7 +39,7 @@ describe "reminder" do
     end
 
     it "should have an ef of 2.8 (based on history)" do
-      @reminder.ef.should be_close(2.8, 0.0001)
+      @reminder.ef.should be_within(EPSILON).of(2.8)
     end
   end
 

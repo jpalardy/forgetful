@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/spec_helper')
+require 'spec_helper'
 
 describe "supermemo" do
   describe "next_i" do
@@ -62,7 +62,7 @@ describe "supermemo" do
 
     qs.zip(results).each do |q,result|
       it "-- next_ef(q, 2.5) = #{result}" do
-        SuperMemo::next_ef(q, 2.5).should be_close(result, 0.00001)
+        SuperMemo::next_ef(q, 2.5).should be_within(EPSILON).of(result)
       end
     end
   end
@@ -73,7 +73,7 @@ describe "supermemo" do
 
     qs.zip(results).each do |q,result|
       it "-- next_ef(q, 1.3) = #{result}" do
-        SuperMemo::next_ef(q, 1.3).should be_close(result, 0.00001)
+        SuperMemo::next_ef(q, 1.3).should be_within(EPSILON).of(result)
       end
     end
   end
@@ -86,7 +86,7 @@ describe "supermemo" do
       it "-- traverse(#{history.inspect}) = #{result.inspect}" do
         ef, i, interval = SuperMemo::traverse(history)
 
-        ef.should be_close(result[0], 0.00001)
+        ef.should be_within(EPSILON).of(result[0])
         i.should == result[1]
         interval.should == result[2]
       end
