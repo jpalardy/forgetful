@@ -2,6 +2,14 @@
 
 require 'optparse'
 
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
+require "forgetful"
+require "forgetful/algorithms/supermemo"
+require "forgetful/algorithms/doubler"
+require "forgetful/extensions/csv/reminder_file"
+require "forgetful/questionaire"
+require "forgetful/cli/quizzer"
+
 #-------------------------------------------------
 
 class FormatException < RuntimeError; end
@@ -27,6 +35,7 @@ end
 
 def parse(args)
   options = { :filenames => [],
+              :algorithm => SuperMemo,
               :action    => :quiz,
               :delay     => 0..0 }
 
@@ -35,11 +44,15 @@ def parse(args)
     arg.separator ""
     arg.separator "Specific options:"
 
-    arg.on(     '-t', '--touch',       "Validate filename(s) and write back in full CSV format") do
+    arg.on(     '-a', '--algorithm NAME', "Specify which algorithm to choose for schedule (SuperMemo / Doubler)") do |value|
+      options[:algorithm] = Object.const_get(value)
+    end
+
+    arg.on(     '-t', '--touch',          "Validate filename(s) and write back in full CSV format") do
       options[:action] = :touch
     end
 
-    arg.on(     '-d', '--delay VALUE', "Delay range (in days) to add to unscheduled items (used with --touch)") do |value|
+    arg.on(     '-d', '--delay VALUE',    "Delay range (in days) to add to unscheduled items (used with --touch)") do |value|
       begin
         options[:delay] = parse_range(value)
       rescue FormatException => e
@@ -73,12 +86,6 @@ end
 
 options = parse(ARGV)
 
-$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib')
-require "forgetful"
-require "forgetful/extensions/csv/reminder_file"
-require "forgetful/questionaire"
-require "forgetful/cli/quizzer"
-
 begin
   options[:filenames].each do |filename|
     csv_file = ReminderFile.new(filename, options[:delay])
@@ -93,7 +100,7 @@ begin
     when :quiz
       puts "### QUIZ: #{filename}"
 
-      questionaire = Questionaire.new(csv_file)
+      questionaire = Questionaire.new(csv_file, options[:algorithm])
       quizzer = CLI::Quizzer.new(questionaire)
 
       quizzer.quiz

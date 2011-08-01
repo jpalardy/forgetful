@@ -36,7 +36,7 @@ describe "questionaire" do
 
     it "should be adjusted" do
       @reminder2_1 = double("reminder2_1")
-      @reminder2.stub(:next) { @reminder2_1 }
+      @questionaire.stub(:next_reminder) { @reminder2_1 }
 
       @source.should_receive(:write).once.with([@reminder1, @reminder2_1, @reminder3])
       @questionaire.grade([[1, 3]])

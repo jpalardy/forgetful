@@ -1,8 +1,9 @@
 class Questionaire
-  attr_reader :source
+  attr_reader :source, :algorithm
 
-  def initialize(source)
-    @source = source
+  def initialize(source, algorithm=SuperMemo)
+    @source    = source
+    @algorithm = algorithm
   end
 
   def questions
@@ -26,9 +27,15 @@ class Questionaire
     def update(reminders, results)
       reminders = reminders.dup
       results.each do |id,q|
-        reminders[id] = reminders.fetch(id).next(q)
+        reminders[id] = next_reminder(reminders.fetch(id), q)
       end
       reminders
+    end
+
+    def next_reminder(reminder, q)
+      next_history = reminder.history + [q]
+      next_date    = @algorithm::next_date(Date.today, next_history)
+      Reminder.new(reminder.question, reminder.answer, next_date, next_history)
     end
 
     def reminders
