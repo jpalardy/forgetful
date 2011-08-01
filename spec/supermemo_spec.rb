@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'forgetful/algorithms/supermemo'
 
 describe "supermemo" do
   describe "next_i" do
